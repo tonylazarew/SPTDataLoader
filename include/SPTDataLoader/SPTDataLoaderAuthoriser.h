@@ -78,13 +78,22 @@ NS_ASSUME_NONNULL_BEGIN
  Mark that a request failed authorisation
  @param request The request to authorise
  */
-- (void)requestFailedAuthorisation:(SPTDataLoaderRequest *)request response:(SPTDataLoaderResponse *) response;
+- (void)requestFailedAuthorisation:(SPTDataLoaderRequest *)request response:(SPTDataLoaderResponse *)response;
 /**
  Refreshes any kind authorisation
  @discussion This is never called by the factory, it is expected that the authoriser will be able to handle refreshes
  when the requestFailedAuthorisation: is called. This is for the benefit of outside consumers of this API.
  */
 - (void)refresh;
+
+@optional
+
+/**
+ Notify the authoriser that a request has failed
+ @param request The request to authorise
+ @param response The response received
+ */
+- (void)request:(SPTDataLoaderRequest *)request didFailWithResponse:(SPTDataLoaderResponse *)response;
 
 @end
 

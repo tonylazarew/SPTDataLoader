@@ -99,6 +99,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)failedResponse:(SPTDataLoaderResponse *)response
 {
+    // Notify the authorisers which care about the request status that the request has failed
+    for (id<SPTDataLoaderAuthoriser> authoriser in self.authorisers) {
+        if ([authoriser respondsToSelector:@selector(request:didFailWithResponse:)]) {
+            [authoriser request:response.request didFailWithResponse:response];
+        }
+    }
+
     // If we failed on authorisation and we have not retried the authorisation, retry it
     if (response.error.code == SPTDataLoaderResponseHTTPStatusCodeUnauthorised && !response.request.retriedAuthorisation) {
         for (id<SPTDataLoaderAuthoriser> authoriser in self.authorisers) {
